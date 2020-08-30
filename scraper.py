@@ -27,6 +27,7 @@ class ArticleReviewer:
         metadata['title'] = self.driver.title.split('|')[0]
         metadata['full_text'] = self.get_pdf_full_text()
         metadata['keyword'] = self.get_keywords()
+        metadata['abstract'] = self.get_abstract()
         return metadata
 
     def get_pdf_full_text(self):
@@ -38,6 +39,9 @@ class ArticleReviewer:
         for element in keyword_elements:
             keywords += f"{element.get_attribute('content')}, "
         return keywords[:-2]
+    
+    def get_abstract(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Description"]').get_attribute('content')
 
 
 if __name__ == "__main__":
