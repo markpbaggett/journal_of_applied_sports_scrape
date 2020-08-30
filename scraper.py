@@ -28,6 +28,7 @@ class ArticleReviewer:
         metadata['full_text'] = self.get_pdf_full_text()
         metadata['keyword'] = self.get_keywords()
         metadata['abstract'] = self.get_abstract()
+        metadata['authors'] = self.get_authors()
         return metadata
 
     def get_pdf_full_text(self):
@@ -42,6 +43,13 @@ class ArticleReviewer:
     
     def get_abstract(self):
         return self.driver.find_element_by_xpath('//meta[@name="DC.Description"]').get_attribute('content')
+
+    def get_authors(self):
+        authors = []
+        author_elements = self.driver.find_elements_by_xpath('//meta[@name="DC.Creator.PersonalName"]')
+        for author in author_elements:
+            authors.append(author.get_attribute('content'))
+        return authors
 
 
 if __name__ == "__main__":
