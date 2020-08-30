@@ -13,9 +13,28 @@ class IssueReviewer:
         self.driver.get(self.issue)
         articles = self.driver.find_elements_by_xpath('//div[@class="tocTitle"]/a')
         return [(article.text, article.get_attribute('href')) for article in articles]
+
+
+class ArticleReviewer:
+    def __init__(self, driver, article_uri):
+        self.driver = driver
+        self.article_uri = article_uri
+        self.dom = self.driver.get(article_uri)
+        self.metadata = self.get_metadata()
+
+    def get_metadata(self):
+        metadata = {}
+        metadata['title'] = self.driver.title
+        metadata['full_text'] = self.get_pdf_full_text()
+        return metadata
+
+    def get_pdf_full_text(self):
+        return self.driver.find_element_by_xpath('//meta[@name="citation_pdf_url"]').get_attribute('content')
         
 
+
 if __name__ == "__main__":
+    articles = []
     pages = ('https://js.sagamorepub.com/jasm/issue/archive', 'https://js.sagamorepub.com/jasm/issue/archive?issuesPage=2#issues')
     options = Options()
     options.add_argument('--headless')
@@ -25,5 +44,7 @@ if __name__ == "__main__":
     issues = [anchor.get_attribute('href') for anchor in all_anchors if anchor.text.startswith('Vol')]
     for issue in issues:
         reviewer = IssueReviewer(x, issue)
-        print(reviewer.articles)
-
+        #print(reviewer.articles)
+        for article in reviewer.articles:
+            new_review = ArticleReviewer(x, article[1])
+            print(new_review.metadata)
