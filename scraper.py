@@ -24,13 +24,20 @@ class ArticleReviewer:
 
     def get_metadata(self):
         metadata = {}
-        metadata['title'] = self.driver.title
+        metadata['title'] = self.driver.title.split('|')[0]
         metadata['full_text'] = self.get_pdf_full_text()
+        metadata['keyword'] = self.get_keywords()
         return metadata
 
     def get_pdf_full_text(self):
         return self.driver.find_element_by_xpath('//meta[@name="citation_pdf_url"]').get_attribute('content')
-        
+
+    def get_keywords(self):
+        keywords = ""
+        keyword_elements = self.driver.find_elements_by_xpath('//meta[@name="citation_keywords"]')
+        for element in keyword_elements:
+            keywords += f"{element.get_attribute('content')}, "
+        return keywords[:-2]
 
 
 if __name__ == "__main__":
