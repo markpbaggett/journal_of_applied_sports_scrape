@@ -29,6 +29,13 @@ class ArticleReviewer:
         metadata['keyword'] = self.get_keywords()
         metadata['abstract'] = self.get_abstract()
         metadata['authors'] = self.get_authors()
+        metadata['date_submitted'] = self.get_date_submitted()
+        metadata['date_modified'] = self.get_date_modified()
+        metadata['date_issued'] = self.get_date_submitted()
+        metadata['journal_name'] = self.get_journal_name()
+        metadata['issn'] = self.get_issn()
+        metadata['issue'] = self.get_issue()
+        metadata['volume'] = self.get_volume()
         return metadata
 
     def get_pdf_full_text(self):
@@ -50,6 +57,27 @@ class ArticleReviewer:
         for author in author_elements:
             authors.append(author.get_attribute('content'))
         return authors
+
+    def get_date_submitted(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Date.dateSubmitted"]').get_attribute('content')
+
+    def get_date_modified(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Date.modified"]').get_attribute('content')
+
+    def get_date_issued(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Date.issued"]').get_attribute('content')
+
+    def get_journal_name(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Source"]').get_attribute('content')
+
+    def get_issn(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Source.ISSN"]').get_attribute('content')
+
+    def get_issue(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Source.Issue"]').get_attribute('content')
+
+    def get_volume(self):
+        return self.driver.find_element_by_xpath('//meta[@name="DC.Source.Volume"]').get_attribute('content')
 
 
 if __name__ == "__main__":
