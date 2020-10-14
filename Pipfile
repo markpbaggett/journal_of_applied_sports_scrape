@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 selenium = "*"
 seleniumrequests = "*"
+black = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
